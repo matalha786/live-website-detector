@@ -50,6 +50,6 @@ Running `python check_websites.py website_list.txt` will produce:
 
 ## License
 
-This project is licensed under the GPL License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the GPL License - see the (LICENSE) file for details.
 ```
 
