@@ -5,13 +5,13 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 def check_website(url):
     try:
-        response = requests.get(url)
+        response = requests.get(url, timeout=10)  # Timeout set to 10 seconds
         if response.status_code == 200:
             return url, 'good'
         else:
             return url, 'bad'
-    except requests.exceptions.RequestException:
-        return url, 'bad'
+    except requests.exceptions.RequestException as e:
+        return url, f"error: {str(e)}"
 
 def check_websites(file_name):
     # Open the input file and read the list of websites
@@ -21,7 +21,7 @@ def check_websites(file_name):
     total_websites = len(websites)
     processed_websites = 0
     start_time = time.time()
-    update_interval = 11  # seconds
+    update_interval = 10  # seconds
 
     # Using ThreadPoolExecutor for concurrent requests
     with ThreadPoolExecutor(max_workers=64) as executor:
@@ -34,7 +34,7 @@ def check_websites(file_name):
                     good_file.write(website_url + '\n')
             else:
                 with open('bad.txt', 'a') as bad_file:
-                    bad_file.write(website_url + '\n')
+                    bad_file.write(f"{website_url}: {result}\n")
             
             # Update progress
             processed_websites += 1
